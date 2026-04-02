@@ -19,7 +19,7 @@ Day 07 — Automating Cloud Infrastructure with Terraform & Ansible
         enabled: yes
 🔹 Terraform — Provision EC2 with IAM Role
 resource "aws_iam_role" "ec2_role" {
-  name               = "pathnex_ec2_role"
+  name               = "HireReady_ec2_role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -34,19 +34,19 @@ resource "aws_iam_role" "ec2_role" {
   })
 }
 
-resource "aws_instance" "pathnex_ec2" {
+resource "aws_instance" "HireReady_ec2" {
   ami           = "ami-0abcd1234abcd1234"
   instance_type = "t2.medium"
   iam_instance_profile = aws_iam_role.ec2_role.name
   tags = {
-    Name = "Pathnex-EC2"
+    Name = "HireReady-EC2"
   }
 }
 🔹 Kubernetes — ConfigMap and Secret Management
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pathnex-config
+  name: HireReady-config
 data:
   app.properties: |
     key=value
@@ -55,7 +55,7 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: pathnex-secret
+  name: HireReady-secret
 type: Opaque
 data:
   password: cGF0aG5leHBhc3M=
