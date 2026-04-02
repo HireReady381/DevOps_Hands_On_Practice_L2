@@ -30,7 +30,7 @@ resource "aws_security_group" "allow_ssh_http" {
   }
 }
 
-resource "aws_instance" "pathnex_ec2" {
+resource "aws_instance" "HireReady_ec2" {
   ami           = "ami-0abcd1234abcd1234"
   instance_type = "t3.medium"
   security_groups = [aws_security_group.allow_ssh_http.name]
@@ -44,11 +44,11 @@ resource "aws_instance" "pathnex_ec2" {
 apiVersion: v1
 kind: Service
 metadata:
-  name: pathnex-service
+  name: HireReady-service
 spec:
   type: NodePort
   selector:
-    app: pathnex-app
+    app: HireReady-app
   ports:
     - protocol: TCP
       port: 80
@@ -60,7 +60,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build('pathnex-app')
+                    docker.build('HireReady-app')
                 }
             }
         }
@@ -68,7 +68,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://docker.io', 'docker-credentials') {
-                        docker.image('pathnex-app').push('latest')
+                        docker.image('HireReady-app').push('latest')
                     }
                 }
             }
@@ -83,11 +83,11 @@ stages:
 build:
   stage: build
   script:
-    - docker build -t pathnex-app .
+    - docker build -t HireReady-app .
 
 push:
   stage: push
   script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-    - docker push pathnex-app
+    - docker push HireReady-app
 
