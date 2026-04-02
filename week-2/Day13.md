@@ -16,19 +16,19 @@ Day 13 — Advanced Automation with CloudFormation and CI/CD
         enabled: yes
 🔹 Terraform — Create IAM Users and Policies
 resource "aws_iam_user" "example_user" {
-  name = "pathnex_user"
+  name = "HireReady_user"
 }
 
 resource "aws_iam_policy" "example_policy" {
-  name        = "pathnex-policy"
-  description = "Policy for Pathnex application"
+  name        = "HireReady-policy"
+  description = "Policy for HireReady application"
   policy      = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
         Action = "s3:ListBucket"
         Effect = "Allow"
-        Resource = "arn:aws:s3:::pathnex-bucket"
+        Resource = "arn:aws:s3:::HireReady-bucket"
       },
     ]
   })
@@ -62,16 +62,16 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pathnex-nginx
+  name: HireReady-nginx
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: pathnex-nginx
+      app: HireReady-nginx
   template:
     metadata:
       labels:
-        app: pathnex-nginx
+        app: HireReady-nginx
     spec:
       containers:
         - name: nginx
@@ -94,7 +94,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    docker.build('pathnex-app')
+                    docker.build('HireReady-app')
                 }
             }
         }
@@ -116,16 +116,16 @@ stages:
 build:
   stage: build
   script:
-    - docker build -t pathnex-web-app .
+    - docker build -t HireReady-web-app .
 
 push:
   stage: push
   script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-    - docker push pathnex-web-app
+    - docker push HireReady-web-app
 
 deploy:
   stage: deploy
   script:
-    - helm repo add pathnex https://charts.pathnex.com
-    - helm install pathnex-nginx pathnex/nginx-ingress
+    - helm repo add HireReady https://charts.HireReady.com
+    - helm install HireReady-nginx HireReady/nginx-ingress
