@@ -33,16 +33,16 @@ resource "aws_autoscaling_group" "example" {
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pathnex-deployment
+  name: HireReady-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pathnex-app
+      app: HireReady-app
   template:
     metadata:
       labels:
-        app: pathnex-app
+        app: HireReady-app
     spec:
       containers:
         - name: nginx
@@ -55,12 +55,12 @@ spec:
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: pathnex-hpa
+  name: HireReady-hpa
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: pathnex-deployment
+    name: HireReady-deployment
   minReplicas: 1
   maxReplicas: 10
   targetCPUUtilizationPercentage: 50
