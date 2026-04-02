@@ -53,17 +53,17 @@ resource "aws_subnet" "private" {
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: pathnex-db
+  name: HireReady-db
 spec:
-  serviceName: "pathnex-db"
+  serviceName: "HireReady-db"
   replicas: 3
   selector:
     matchLabels:
-      app: pathnex-db
+      app: HireReady-db
   template:
     metadata:
       labels:
-        app: pathnex-db
+        app: HireReady-db
     spec:
       containers:
         - name: db
@@ -83,7 +83,7 @@ spec:
 pipeline {
     agent any
     environment {
-        IMAGE_NAME = 'pathnex-web-app'
+        IMAGE_NAME = 'HireReady-web-app'
     }
     stages {
         stage('Build Docker Image') {
@@ -120,13 +120,13 @@ stages:
 build:
   stage: build
   script:
-    - docker build -t pathnex-web-app .
+    - docker build -t HireReady-web-app .
 
 push:
   stage: push
   script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-    - docker push pathnex-web-app
+    - docker push HireReady-web-app
 
 deploy:
   stage: deploy
