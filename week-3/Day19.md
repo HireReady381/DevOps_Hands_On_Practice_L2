@@ -16,13 +16,13 @@ Day 19 — Advanced Monitoring, Logging, and Security
         state: started
         enabled: yes
 🔹 Terraform — Setup AWS CloudWatch for Monitoring
-resource "aws_cloudwatch_log_group" "pathnex_log_group" {
-  name = "pathnex-log-group"
+resource "aws_cloudwatch_log_group" "HireReady_log_group" {
+  name = "HireReady-log-group"
 }
 
-resource "aws_cloudwatch_log_stream" "pathnex_log_stream" {
-  log_group_name = aws_cloudwatch_log_group.pathnex_log_group.name
-  name           = "pathnex-log-stream"
+resource "aws_cloudwatch_log_stream" "HireReady_log_stream" {
+  log_group_name = aws_cloudwatch_log_group.HireReady_log_group.name
+  name           = "HireReady-log-stream"
 }
 🔹 Kubernetes — Deploy Fluentd for Logging
 apiVersion: apps/v1
@@ -62,7 +62,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Docker image...'
-                docker.build('pathnex-web-app')
+                docker.build('HireReady-web-app')
             }
         }
         stage('Test') {
@@ -89,13 +89,13 @@ stages:
 build:
   stage: build
   script:
-    - docker build -t pathnex-web-app .
+    - docker build -t HireReady-web-app .
 
 push:
   stage: push
   script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-    - docker push pathnex-web-app
+    - docker push HireReady-web-app
 
 deploy:
   stage: deploy
