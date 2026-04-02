@@ -17,8 +17,8 @@
         state: started
         enabled: yes
 🔹 Terraform — Create CloudWatch Alarms
-resource "aws_cloudwatch_metric_alarm" "pathnex_cpu_alarm" {
-  alarm_name          = "pathnex-cpu-utilization-high"
+resource "aws_cloudwatch_metric_alarm" "HireReady_cpu_alarm" {
+  alarm_name          = "HireReady-cpu-utilization-high"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
   metric_name         = "CPUUtilization"
@@ -28,14 +28,14 @@ resource "aws_cloudwatch_metric_alarm" "pathnex_cpu_alarm" {
   threshold           = "80"
 
   dimensions = {
-    InstanceId = aws_instance.pathnex_ec2.id
+    InstanceId = aws_instance.HireReady_ec2.id
   }
 
-  alarm_actions = [aws_sns_topic.pathnex_alerts.arn]
+  alarm_actions = [aws_sns_topic.HireReady_alerts.arn]
 }
 
-resource "aws_sns_topic" "pathnex_alerts" {
-  name = "pathnex-alerts"
+resource "aws_sns_topic" "HireReady_alerts" {
+  name = "HireReady-alerts"
 }
 🔹 Kubernetes — Set Up Prometheus and Grafana
 apiVersion: apps/v1
