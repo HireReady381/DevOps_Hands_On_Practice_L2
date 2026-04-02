@@ -21,35 +21,35 @@
         state: started
         enabled: yes
 🔹 Terraform — Multi-Region Auto-scaling Group with ALB
-resource "aws_lb" "pathnex_lb" {
-  name               = "pathnex-lb"
+resource "aws_lb" "HireReady_lb" {
+  name               = "HireReady-lb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.allow_ssh_http.id]
   subnets            = [aws_subnet.public.id, aws_subnet.public2.id]
 }
 
-resource "aws_autoscaling_group" "pathnex_asg" {
+resource "aws_autoscaling_group" "HireReady_asg" {
   desired_capacity     = 3
   max_size             = 5
   min_size             = 2
   vpc_zone_identifier  = [aws_subnet.public.id, aws_subnet.public2.id]
-  launch_configuration = aws_launch_configuration.pathnex_config.id
+  launch_configuration = aws_launch_configuration.HireReady_config.id
 }
 🔹 Kubernetes — Horizontal Pod Autoscaler with Multiple Replicas
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pathnex-web-app
+  name: HireReady-web-app
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: pathnex-web-app
+      app: HireReady-web-app
   template:
     metadata:
       labels:
-        app: pathnex-web-app
+        app: HireReady-web-app
     spec:
       containers:
         - name: nginx
@@ -60,12 +60,12 @@ spec:
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: pathnex-web-app-hpa
+  name: HireReady-web-app-hpa
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: pathnex-web-app
+    name: HireReady-web-app
   minReplicas: 2
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
@@ -76,7 +76,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Docker image...'
-                docker.build('pathnex-web-app')
+                docker.build('HireReady-web-app')
             }
         }
         stage('Test') {
@@ -105,13 +105,13 @@ stages:
 build:
   stage: build
   script:
-    - docker build -t pathnex-web-app .
+    - docker build -t HireReady-web-app .
 
 push:
   stage: push
   script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-    - docker push pathnex-web-app
+    - docker push HireReady-web-app
 
 deploy:
   stage: deploy
