@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/pathnex/sample-repo.git'
+                git 'https://github.com/HireReady/sample-repo.git'
             }
         }
         stage('Build') {
@@ -37,12 +37,12 @@ stages:
 build:
   stage: build
   script:
-    - docker build -t pathnex-app .
+    - docker build -t HireReady-app .
 
 push:
   stage: push
   script:
-    - docker push pathnex-app
+    - docker push HireReady-app
 
 deploy:
   stage: deploy
@@ -55,22 +55,22 @@ deploy:
   tasks:
     - name: Create user
       user:
-        name: pathnex
+        name: HireReady
         state: present
         shell: /bin/bash
     - name: Set permissions for the user
       file:
-        path: /home/pathnex
-        owner: pathnex
-        group: pathnex
+        path: /home/HireReady
+        owner: HireReady
+        group: HireReady
         mode: '0755'
 🔹 Terraform — EC2 with Tags and Volume
-resource "aws_instance" "PathnexEC2" {
+resource "aws_instance" "HireReadyEC2" {
   ami           = "ami-0abcd1234abcd1234"
   instance_type = "t2.medium"
   
   tags = {
-    Name = "Pathnex-Server"
+    Name = "HireReady-Server"
   }
 
   ebs_block_device {
