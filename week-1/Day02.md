@@ -1,7 +1,7 @@
 Day 02 — Services & Tags
 
 🔹 Ansible — Install & Enable Nginx
-- name: Install and start Nginx on Pathnex
+- name: Install and start Nginx on HireReady
   hosts: all
   become: yes
 
@@ -23,14 +23,14 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_instance" "PathnexEC2" {
+resource "aws_instance" "HireReadyEC2" {
   ami           = "ami-0abcd1234abcd1234"
   instance_type = "r5.2xlarge"
 
   tags = {
-    Name        = "Pathnex-Server"
+    Name        = "HireReady-Server"
     Environment = "Training"
-    Owner       = "PathnexStudent"
+    Owner       = "HireReadyStudent"
   }
 }
 
@@ -39,16 +39,16 @@ resource "aws_instance" "PathnexEC2" {
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pathnex-deployment
+  name: HireReady-deployment
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: pathnex-app
+      app: HireReady-app
   template:
     metadata:
       labels:
-        app: pathnex-app
+        app: HireReady-app
     spec:
       containers:
         - name: app
