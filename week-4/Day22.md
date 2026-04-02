@@ -12,19 +12,19 @@ Day 22 — Multi-Cluster Kubernetes Management
     - name: Deploy Nginx on Cluster 2
       command: kubectl apply -f kubernetes/deployment.yaml
 🔹 Terraform — Multi-Region Kubernetes Cluster with EKS and GKE
-resource "aws_eks_cluster" "pathnex_eks" {
-  name     = "pathnex-eks-cluster"
+resource "aws_eks_cluster" "HireReady_eks" {
+  name     = "HireReady-eks-cluster"
   role_arn = aws_iam_role.eks_cluster_role.arn
 
   vpc_config {
-    subnet_ids = [aws_subnet.pathnex_subnet.id]
+    subnet_ids = [aws_subnet.HireReady_subnet.id]
   }
 
   depends_on = [aws_iam_role_policy_attachment.eks_cluster_role_policy]
 }
 
-resource "google_container_cluster" "pathnex_gke" {
-  name     = "pathnex-gke-cluster"
+resource "google_container_cluster" "HireReady_gke" {
+  name     = "HireReady-gke-cluster"
   location = "us-central1-a"
   initial_node_count = 3
   node_config {
@@ -35,16 +35,16 @@ resource "google_container_cluster" "pathnex_gke" {
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pathnex-deployment
+  name: HireReady-deployment
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: pathnex-app
+      app: HireReady-app
   template:
     metadata:
       labels:
-        app: pathnex-app
+        app: HireReady-app
     spec:
       containers:
         - name: nginx
@@ -55,7 +55,7 @@ spec:
 apiVersion: federation.k8s.io/v1beta1
 kind: FederatedDeployment
 metadata:
-  name: pathnex-federated-deployment
+  name: HireReady-federated-deployment
   namespace: default
 spec:
   template:
@@ -63,11 +63,11 @@ spec:
       replicas: 3
       selector:
         matchLabels:
-          app: pathnex-app
+          app: HireReady-app
       template:
         metadata:
           labels:
-            app: pathnex-app
+            app: HireReady-app
         spec:
           containers:
             - name: nginx
