@@ -6,16 +6,16 @@ Day 16 — Advanced CloudFormation & Multi-Region Deployments
   tasks:
     - name: Launch EC2 instance in us-east-1
       ec2_instance:
-        name: pathnex-ec2-us-east-1
-        key_name: pathnex-key
+        name: HireReady-ec2-us-east-1
+        key_name: HireReady-key
         region: us-east-1
         instance_type: t2.micro
         image: ami-0abcd1234abcd1234
         wait: yes
     - name: Launch EC2 instance in us-west-1
       ec2_instance:
-        name: pathnex-ec2-us-west-1
-        key_name: pathnex-key
+        name: HireReady-ec2-us-west-1
+        key_name: HireReady-key
         region: us-west-1
         instance_type: t2.micro
         image: ami-0abcd1234abcd1234
@@ -31,13 +31,13 @@ resource "aws_vpc" "us_west_vpc" {
   region     = "us-west-1"
 }
 
-resource "aws_instance" "pathnex_ec2_us_east" {
+resource "aws_instance" "HireReady_ec2_us_east" {
   ami           = "ami-0abcd1234abcd1234"
   instance_type = "t2.micro"
   region        = "us-east-1"
 }
 
-resource "aws_instance" "pathnex_ec2_us_west" {
+resource "aws_instance" "HireReady_ec2_us_west" {
   ami           = "ami-0abcd1234abcd1234"
   instance_type = "t2.micro"
   region        = "us-west-1"
@@ -46,18 +46,18 @@ resource "aws_instance" "pathnex_ec2_us_west" {
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pathnex-deployment
+  name: HireReady-deployment
   labels:
-    app: pathnex-app
+    app: HireReady-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: pathnex-app
+      app: HireReady-app
   template:
     metadata:
       labels:
-        app: pathnex-app
+        app: HireReady-app
     spec:
       containers:
         - name: nginx
@@ -70,10 +70,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: pathnex-service
+  name: HireReady-service
 spec:
   selector:
-    app: pathnex-app
+    app: HireReady-app
   ports:
     - protocol: TCP
       port: 80
@@ -84,7 +84,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Docker image...'
-                docker.build('pathnex-web-app')
+                docker.build('HireReady-web-app')
             }
         }
         stage('Test') {
@@ -114,13 +114,13 @@ stages:
 build:
   stage: build
   script:
-    - docker build -t pathnex-web-app .
+    - docker build -t HireReady-web-app .
 
 push:
   stage: push
   script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-    - docker push pathnex-web-app
+    - docker push HireReady-web-app
 
 deploy:
   stage: deploy
