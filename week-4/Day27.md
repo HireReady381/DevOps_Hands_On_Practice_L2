@@ -4,10 +4,10 @@
   hosts: localhost
   tasks:
     - name: Create Lambda function
-      command: aws lambda create-function --function-name pathnex-lambda --runtime nodejs14.x --role arn:aws:iam::123456789012:role/lambda-role --handler index.handler --zip-file fileb://lambda.zip
+      command: aws lambda create-function --function-name HireReady-lambda --runtime nodejs14.x --role arn:aws:iam::123456789012:role/lambda-role --handler index.handler --zip-file fileb://lambda.zip
 🔹 Terraform — Create DynamoDB Table for Serverless Application
-resource "aws_dynamodb_table" "pathnex_table" {
-  name           = "pathnex-table"
+resource "aws_dynamodb_table" "HireReady_table" {
+  name           = "HireReady-table"
   hash_key       = "id"
   billing_mode   = "PAY_PER_REQUEST"
   attribute {
@@ -19,7 +19,7 @@ resource "aws_dynamodb_table" "pathnex_table" {
 apiVersion: kubeless.io/v1beta1
 kind: Function
 metadata:
-  name: pathnex-lambda
+  name: HireReady-lambda
   namespace: default
 spec:
   runtime: nodejs14
@@ -41,7 +41,7 @@ pipeline {
         stage('Deploy to Lambda') {
             steps {
                 script {
-                    sh 'aws lambda update-function-code --function-name pathnex-lambda --zip-file fileb://lambda.zip'
+                    sh 'aws lambda update-function-code --function-name HireReady-lambda --zip-file fileb://lambda.zip'
                 }
             }
         }
