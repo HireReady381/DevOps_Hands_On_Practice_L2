@@ -14,30 +14,30 @@ Day 15 — Automation with Terraform, Ansible, and CI/CD Pipelines
         state: started
         enabled: yes
 🔹 Terraform — Create EC2 with ALB (Application Load Balancer)
-resource "aws_lb" "pathnex_lb" {
-  name               = "pathnex-lb"
+resource "aws_lb" "HireReady_lb" {
+  name               = "HireReady-lb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.allow_ssh_http.id]
   subnets            = [aws_subnet.public.id]
 }
 
-resource "aws_instance" "pathnex_ec2" {
+resource "aws_instance" "HireReady_ec2" {
   ami             = "ami-0abcd1234abcd1234"
   instance_type   = "t2.micro"
   security_groups = [aws_security_group.allow_ssh_http.name]
 
   tags = {
-    Name = "Pathnex-EC2"
+    Name = "HireReady-EC2"
   }
 }
 🔹 Kubernetes — Helm Chart for Redis with Persistence
-helm install pathnex-redis bitnami/redis --set persistence.enabled=true --set persistence.size=8Gi
+helm install HireReady-redis bitnami/redis --set persistence.enabled=true --set persistence.size=8Gi
 🔹 Jenkinsfile — Multi-Environment Deployment
 pipeline {
     agent any
     environment {
-        IMAGE_NAME = 'pathnex-web-app'
+        IMAGE_NAME = 'HireReady-web-app'
         DEPLOY_ENV = 'production'
     }
     stages {
@@ -74,13 +74,13 @@ stages:
 build:
   stage: build
   script:
-    - docker build -t pathnex-web-app .
+    - docker build -t HireReady-web-app .
 
 push:
   stage: push
   script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-    - docker push pathnex-web-app
+    - docker push HireReady-web-app
 
 deploy:
   stage: deploy
