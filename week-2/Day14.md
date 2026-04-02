@@ -21,14 +21,14 @@
         state: restarted
         enabled: yes
 🔹 Terraform — Create S3 Bucket with Versioning and Logging
-resource "aws_s3_bucket" "pathnex_bucket" {
-  bucket = "pathnex-bucket"
+resource "aws_s3_bucket" "HireReady_bucket" {
+  bucket = "HireReady-bucket"
   versioning {
     enabled = true
   }
 
   logging {
-    target_bucket = "pathnex-log-bucket"
+    target_bucket = "HireReady-log-bucket"
     target_prefix = "logs/"
   }
 }
@@ -36,19 +36,19 @@ resource "aws_s3_bucket" "pathnex_bucket" {
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: pathnex-ingress
+  name: HireReady-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: pathnex.local
+    - host: HireReady.local
       http:
         paths:
         - path: /
           pathType: Prefix
           backend:
             service:
-              name: pathnex-service
+              name: HireReady-service
               port:
                 number: 80
 🔹 Jenkinsfile — Build, Test, and Deploy with Stages
@@ -58,7 +58,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Docker image...'
-                docker.build('pathnex-web-app')
+                docker.build('HireReady-web-app')
             }
         }
         stage('Test') {
@@ -84,15 +84,15 @@ stages:
 build:
   stage: build
   script:
-    - docker build -t pathnex-web-app .
+    - docker build -t HireReady-web-app .
 
 push:
   stage: push
   script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-    - docker push pathnex-web-app
+    - docker push HireReady-web-app
 
 deploy:
   stage: deploy
   script:
-    - helm upgrade --install pathnex-nginx pathnex/nginx-ingress
+    - helm upgrade --install HireReady-nginx HireReady/nginx-ingress
