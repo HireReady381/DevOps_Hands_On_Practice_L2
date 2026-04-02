@@ -12,8 +12,8 @@ Day 20 — Security, Hardening, and Compliance
     - name: Save iptables configuration
       command: service iptables save
 🔹 Terraform — Configure Security Groups for EC2
-resource "aws_security_group" "pathnex_sg" {
-  name_prefix = "pathnex-sg-"
+resource "aws_security_group" "HireReady_sg" {
+  name_prefix = "HireReady-sg-"
   description = "Allow SSH and HTTP"
 
   ingress {
@@ -34,10 +34,10 @@ resource "aws_security_group" "pathnex_sg" {
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: pathnex-cluster-admin
+  name: HireReady-cluster-admin
 subjects:
   - kind: User
-    name: pathnex-user
+    name: HireReady-user
     apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: ClusterRole
@@ -53,14 +53,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Docker image...'
-                docker.build('pathnex-web-app')
+                docker.build('HireReady-web-app')
             }
         }
         stage('Push') {
             steps {
                 script {
                     docker.withRegistry('https://docker.io', 'docker-credentials') {
-                        docker.image('pathnex-web-app').push('latest')
+                        docker.image('HireReady-web-app').push('latest')
                     }
                 }
             }
@@ -76,13 +76,13 @@ stages:
 build:
   stage: build
   script:
-    - docker build -t pathnex-web-app .
+    - docker build -t HireReady-web-app .
 
 push:
   stage: push
   script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-    - docker push pathnex-web-app
+    - docker push HireReady-web-app
 
 deploy:
   stage: deploy
