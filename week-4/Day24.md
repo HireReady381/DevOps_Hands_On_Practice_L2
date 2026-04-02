@@ -9,34 +9,34 @@
     - name: Install Helm
       command: curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
     - name: Deploy microservices with Helm
-      command: helm install pathnex-app ./microservice-chart
+      command: helm install HireReady-app ./microservice-chart
 🔹 Terraform — Multi-Module Infrastructure with Outputs
-module "pathnex_vpc" {
+module "HireReady_vpc" {
   source = "./vpc"
 }
 
-module "pathnex_instance" {
+module "HireReady_instance" {
   source = "./instance"
-  vpc_id = module.pathnex_vpc.vpc_id
+  vpc_id = module.HireReady_vpc.vpc_id
 }
 
 output "instance_id" {
-  value = module.pathnex_instance.instance_id
+  value = module.HireReady_instance.instance_id
 }
 🔹 Kubernetes — Helm-based Auto-Scaling Deployments
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pathnex-web-app
+  name: HireReady-web-app
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: pathnex-web-app
+      app: HireReady-web-app
   template:
     metadata:
       labels:
-        app: pathnex-web-app
+        app: HireReady-web-app
     spec:
       containers:
         - name: nginx
@@ -47,12 +47,12 @@ spec:
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: pathnex-web-app-hpa
+  name: HireReady-web-app-hpa
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: pathnex-web-app
+    name: HireReady-web-app
   minReplicas: 2
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
