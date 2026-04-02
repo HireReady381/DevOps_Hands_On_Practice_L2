@@ -18,8 +18,8 @@ Day 21 — Disaster Recovery and Backup Strategies
     - name: Restore backup from remote server
       command: tar -xzvf /tmp/etc-backup.tar.gz -C /
 🔹 Terraform — Create S3 Bucket with Cross-Region Replication
-resource "aws_s3_bucket" "pathnex_bucket" {
-  bucket = "pathnex-backup-bucket"
+resource "aws_s3_bucket" "HireReady_bucket" {
+  bucket = "HireReady-backup-bucket"
   region = "us-east-1"
 
   versioning {
@@ -27,8 +27,8 @@ resource "aws_s3_bucket" "pathnex_bucket" {
   }
 }
 
-resource "aws_s3_bucket" "pathnex_backup_bucket_eu" {
-  bucket = "pathnex-backup-bucket-eu"
+resource "aws_s3_bucket" "HireReady_backup_bucket_eu" {
+  bucket = "HireReady-backup-bucket-eu"
   region = "eu-west-1"
 
   versioning {
@@ -36,26 +36,26 @@ resource "aws_s3_bucket" "pathnex_backup_bucket_eu" {
   }
 }
 
-resource "aws_s3_bucket_object" "pathnex_backup_file" {
-  bucket = aws_s3_bucket.pathnex_bucket.bucket
+resource "aws_s3_bucket_object" "HireReady_backup_file" {
+  bucket = aws_s3_bucket.HireReady_bucket.bucket
   key    = "backup.tar.gz"
-  source = "pathnex-backup.tar.gz"
+  source = "HireReady-backup.tar.gz"
 }
 🔹 Kubernetes — Disaster Recovery with Persistent Volumes
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: pathnex-statefulset
+  name: HireReady-statefulset
 spec:
-  serviceName: "pathnex"
+  serviceName: "HireReady"
   replicas: 3
   selector:
     matchLabels:
-      app: pathnex
+      app: HireReady
   template:
     metadata:
       labels:
-        app: pathnex
+        app: HireReady
     spec:
       containers:
         - name: nginx
