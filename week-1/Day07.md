@@ -1,4 +1,5 @@
 Day 07 — Automating Cloud Infrastructure with Terraform & Ansible
+
 🔹 Ansible — Setup Nginx with Custom Config
 - name: Setup Nginx with Custom Config
   hosts: all
