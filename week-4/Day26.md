@@ -14,25 +14,25 @@
         key: "{{ lookup('file', '/home/user/.ssh/id_rsa.pub') }}"
 
 🔹 Terraform — Enabling VPC Flow Logs for Security
-resource "aws_vpc_flow_log" "pathnex_flow_log" {
-  log_group_name = "pathnex-flow-logs"
-  vpc_id         = aws_vpc.pathnex_vpc.id
+resource "aws_vpc_flow_log" "HireReady_flow_log" {
+  log_group_name = "HireReady-flow-logs"
+  vpc_id         = aws_vpc.HireReady_vpc.id
   traffic_type   = "ALL"
   log_destination_type = "cloud-watch-logs"
 }
 
-resource "aws_cloudwatch_log_group" "pathnex_flow_logs_group" {
-  name = "pathnex-flow-logs"
+resource "aws_cloudwatch_log_group" "HireReady_flow_logs_group" {
+  name = "HireReady-flow-logs"
 }
 🔹 Kubernetes — Network Policies for Security
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: pathnex-web-policy
+  name: HireReady-web-policy
 spec:
   podSelector:
     matchLabels:
-      app: pathnex-web-app
+      app: HireReady-web-app
   policyTypes:
     - Ingress
     - Egress
@@ -40,12 +40,12 @@ spec:
     - from:
         - podSelector:
             matchLabels:
-              app: pathnex-api
+              app: HireReady-api
   egress:
     - to:
         - podSelector:
             matchLabels:
-              app: pathnex-database
+              app: HireReady-database
 🔹 Jenkinsfile — Secure the Pipeline with Secrets
 pipeline {
     agent any
@@ -57,7 +57,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Docker image...'
-                docker.build('pathnex-web-app')
+                docker.build('HireReady-web-app')
             }
         }
         stage('Deploy') {
@@ -76,7 +76,7 @@ stages:
 build:
   stage: build
   script:
-    - docker build -t pathnex-web-app .
+    - docker build -t HireReady-web-app .
 
 deploy:
   stage: deploy
