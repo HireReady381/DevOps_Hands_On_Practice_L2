@@ -11,30 +11,30 @@
       command: docker-compose -f /path/to/docker-compose.yml up -d
       
 🔹 Terraform — Provisioning Multi-Tier Application with VPC and Security
-resource "aws_vpc" "pathnex_vpc" {
+resource "aws_vpc" "HireReady_vpc" {
   cidr_block = "10.0.0.0/16"
 }
 
-resource "aws_instance" "pathnex_app" {
+resource "aws_instance" "HireReady_app" {
   ami           = "ami-0abcd1234abcd1234"
   instance_type = "t2.medium"
-  subnet_id     = aws_subnet.pathnex_subnet.id
-  security_groups = [aws_security_group.pathnex_sg.name]
+  subnet_id     = aws_subnet.HireReady_subnet.id
+  security_groups = [aws_security_group.HireReady_sg.name]
 }
 🔹 Kubernetes — Deploy Full Application Stack
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pathnex-app
+  name: HireReady-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: pathnex-app
+      app: HireReady-app
   template:
     metadata:
       labels:
-        app: pathnex-app
+        app: HireReady-app
     spec:
       containers:
         - name: nginx
@@ -45,10 +45,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: pathnex-service
+  name: HireReady-service
 spec:
   selector:
-    app: pathnex-app
+    app: HireReady-app
   ports:
     - port: 80
       targetPort: 80
